@@ -1,5 +1,6 @@
 require 'sinatra'
 require './models/form_data.rb'
+require './lib/distance.rb'
 
 get '/' do
 	@form = FormData.new
