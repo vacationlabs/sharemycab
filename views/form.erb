@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>Form</title>
+</head>
+
+<body>
+<form action="submit" method="POST" >
+<!-- :name,:email,:airport,:date_time,:flight_no,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status -->
+<% if not @form.errors_found.empty? %>
+	<h4>Errors Exist in the form: </h4>
+	<ul>
+	<% @form.errors_found.each do |error|%>
+		<li>Error: <%= error["msg"] %> <%= error["field"] %></li>
+	<% end %>
+	</ul>
+<% end%>
+Name: <input type="text" name="name" value="<%= @form.name %>"/><br />
+Airport: <input type="text" name="airport" value="<%= @form.airport %>" /><br />
+Email: <input type="email" name="email" value="<%= @form.email %>" /><br />
+Date: <input type="date" name="date" value="<%= @form.date %>"/><br />
+Time: <input type="time" name="time" value="<%= @form.time %>" /><br />
+Flight No: <input type="text" name="flight_no" value="<%= @form.flight_no %>" /><br />
+Time tolerence: <input type="text" name="time_tolerance"  value="<%= @form.time_tolerance %>" /><br />
+KM tolerence: <input type="text" name="km_tolerance"  value="<%= @form.km_tolerance %>" /><br />
+Address: <input type="text" name="address" value="<%= @form.address %>"  /><br />
+Latitude: <input type="number" name="lat" value="<%= @form.lat %>" /><br />
+Longitude: <input type="number" name="long" value="<%= @form.long %>" /><br />
+Phone No: <input type="text" name="phone" value="<%= @form.phone %>" /><br />
+Status: <input type="text" name="status" value="<%= @form.status %>" /><br />
+<input type="submit" value="Submit" />
+</form>
+</body>
+
+</html>
