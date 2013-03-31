@@ -1,9 +1,13 @@
+require "rubygems"
+require "net/http"
 require 'sinatra'
 require './models/form_data.rb'
 require './lib/distance.rb'
 require './models/trip.rb'
+require './lib/send_mail.rb'
+require "json"
 
-POPULAR_AIRPORT = {
+POPULAR_AIRPORTS = {
 	'BOM'=>'Bombay (Mumbai),Chhatrapati Shivaji Airport (BOM)',
 	'BLR'=>'Bangalore,Hindustan Airport (BLR)',
 	'CCU'=>'Calcutta (Kolkata),Netaji Subhas Chandra Airport (CCU)',
@@ -149,7 +153,6 @@ AIRPORTS = {
 
 get '/' do
 	@form = FormData.new
-  puts @form.inspect
 	erb :landing
 end
 
@@ -172,21 +175,71 @@ post '/submit' do
 	@form.validate_email
 	@form.validate_km_tolerance
 	@form.validate_time_tolerance
-	@form.validate_longitude
-	@form.validate_latitude
 	@form.validate_phone
 	@form.validate_date_time
 
-	if @form.error_exists
-		erb :landing
-	else
-		trip = @form.to_trip
-		trip.save
-		possible_matches = trip.match_trips
-		actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t)}
-		if actual_matches.length>0
-			send_match_notification(actual_matches)
-		end
-		erb :done
+	return (erb :landing) if @form.error_exists
+
+	puts "======================= BEFORE CALLING API"
+
+	(lat, long) = get_lat_long_from_google_object_key(params[:destination_ref_key])
+	@form.lat = lat
+	@form.long = long
+	@form.validate_longitude
+	@form.validate_latitude
+
+	puts "======================= AFTER CALLING API #{@form.error_exists}"
+
+	return (erb :landing) if @form.error_exists
+
+
+	puts "======================= BEFORE SABING"
+	trip = @form.to_trip
+	trip.save
+	possible_matches = trip.match_trips
+	puts "POSSIBLE MATCHES ====================== #{possible_matches.inspect}"
+	actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t)}
+	if actual_matches.length>0
+		puts "======================== #{actual_matches.inspect}"
+		send_match_notifications(trip, actual_matches)
 	end
+	erb :done
+end
+
+
+get '/places/:address' do
+	keyword=URI.escape(params[:address])
+	uri = URI("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=#{keyword}&types=establishment&sensor=false&key=AIzaSyAGeap2PXa_AS19npQLjDlUbE8w0t_atwE")
+
+	result = nil
+
+	Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+	  request = Net::HTTP::Get.new uri.request_uri
+	  response = http.request request # Net::HTTPResponse object
+		result = JSON.parse(response.body)
+	end
+
+	predictions=[]
+	descriptions = result["predictions"]
+	descriptions.each do |description|
+		predictions.push({ 'address' => description["description"], 'reference_key' => description["reference"]})
+	end
+
+	content_type :json
+  { :address_prediction => predictions }.to_json
+end
+
+
+
+def get_lat_long_from_google_object_key(key)
+	keyword=URI.escape(key)
+	uri = URI("https://maps.googleapis.com/maps/api/place/details/json?reference=#{keyword}&sensor=false&key=AIzaSyAGeap2PXa_AS19npQLjDlUbE8w0t_atwE")
+	lat, long = [nil, nil]
+	Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+	  request = Net::HTTP::Get.new uri.request_uri
+	  response = JSON.parse(http.request(request).body)
+		lat =response["result"]["geometry"]["location"]["lat"]
+		long = response["result"]["geometry"]["location"]["lng"]
+	end
+	return [lat.to_s, long.to_s]
 end

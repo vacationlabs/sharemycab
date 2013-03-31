@@ -91,6 +91,10 @@
 							 	<label class="control-label">I need a cab from</label>
 								<div class="controls">
 									<select name="airport">
+										<% for airport in POPULAR_AIRPORTS %>
+											<option value="<%= airport[0] %>"><%= airport[1] %></option>
+										<% end %>
+											<option>---------</option>
 										<% for airport in AIRPORTS %>
 											<option value="<%= airport[0] %>"><%= airport[1] %></option>
 										<% end %>
@@ -122,13 +126,14 @@
 							<div class="control-group">
 							 	<label class="control-label">I want to take a cab till</label>
 								<div class="controls">
-									<input type="text" name="address" value="<%= @form.address %>"/>
+									<input type="text" name="address" value="<%= @form.address %>" id="address" />
+									<input type="hidden" name="destination_ref_key" id="reference_key" />
 								</div>
 							</div>
 							<div class="control-group">
 							 	<label class="control-label">I don't mind waiting</label>
 								<div class="controls">
-									<input type="hidden" name="time_tolerance" value="<%= @form.time_tolerance %>"/>
+									<input type="hidden" name="time_tolerance" value="<%= @form.time_tolerance || 10 %>"/>
 									<div id="time_slider_value">10 minutes</div>
 									<div id="time_slider"></div>
 								</div>
@@ -136,7 +141,7 @@
 							<div class="control-group">
 							 	<label class="control-label">I don't mind travelling out of my way</label>
 								<div class="controls">
-									<input type="hidden" name="km_tolerance" value="<%= @form.km_tolerance %>"/>
+									<input type="hidden" name="km_tolerance" value="<%= @form.km_tolerance || 3 %>"/>
 									<div id="km_slider_value">3 kms</div>
 									<div id="km_slider"></div>
 								</div>
@@ -181,6 +186,33 @@
 			});
 
 		});
+
+		var availableAddress = [];
+
+		var address_with_reference= [];
+
+			$( "#address" ).autocomplete({
+				source: availableAddress,
+				select: function(event,ui) {
+					$.each(address_with_reference,function(i, v){
+						if (ui["item"]["value"] == v["address"]){
+							$('#reference_key').val(v["reference_key"]);
+						}
+					});
+
+				}
+			});
+
+			$("#address").bind("input", function(){
+				$.ajax({
+				url: "/places/"+$("#address").val()
+				}).done(function(data) {
+					$.each(data["address_prediction"], function(i,v){
+						availableAddress.push(v["address"])
+						address_with_reference.push(v);
+					});
+				});
+			});
 		</script>
 	</body>
 </html>	

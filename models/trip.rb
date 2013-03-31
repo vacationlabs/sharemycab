@@ -33,7 +33,7 @@ class Trip
 		sql = "Select name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where id = #{id}"
 		res = conn.exec(sql)
 		b = res.values[0]
-		time = Time.parse(b[3] + "UTC").getlocal("+0530")
+		time = Time.parse(b[3] + "UTC").getlocal("+05:30")
 		return Trip.new(b[0],b[1],b[2],time,b[4],b[5],b[6],b[7],b[8],b[9],b[10],b[11])
 	end
 
@@ -48,8 +48,8 @@ class Trip
 		time = Time.new
 
 		res.values.each do |b|
-			time = Time.parse(b[3] + "UTC").getlocal("+0530")
-			tripobjects.push(Trip.new(b[0],b[1],b[2],time,b[4],b[5],b[6],b[7],b[8],b[9],b[10],b[11]))
+			time = Time.parse(b[3] + "UTC").getlocal("+05:30")
+			tripobjects.push(Trip.new(b[0],b[1],b[2],time,b[4],b[5].to_i,b[6].to_i,b[7],BigDecimal.new(b[8]), BigDecimal.new(b[9]), b[10],b[11]))
 		end
 
 		return tripobjects
@@ -66,8 +66,8 @@ class Trip
 
 
 	def self.time_tolerance_check(user1, user2)
-	  (early, late) = (user1.arrival_date_time < user2.arrival_date_time) ? [user1, user2] : [user2, user1]
-	  return (early.arrival_date_time + (early.time_tolerance*60)) > late.arrival_date_time
+	  (early, late) = (user1.arrival_datetime < user2.arrival_datetime) ? [user1, user2] : [user2, user1]
+	  return (early.arrival_datetime + (early.time_tolerance*60)) > late.arrival_datetime
 	end
 
 	def self.trip_matches?(t1, t2)

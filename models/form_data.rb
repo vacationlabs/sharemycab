@@ -19,8 +19,8 @@ class FormData
 	end
 
 	def validate_empty
-		field_names = ["name","email","airport","date","time","flight_no","time_tolerance","km_tolerance","address","lat","long","phone"]
-		fields = [name,email,airport,date,time,flight_no,time_tolerance,km_tolerance,address,lat,long,phone]
+		field_names = ["name","email","airport","date","time","time_tolerance","km_tolerance","address","phone"]
+		fields = [name,email,airport,date,time,time_tolerance,km_tolerance,address,phone]
 		(0..fields.length-1).each do |i|
 				if (fields[i] || '').length == 0
 					@errors_found.push({"msg"=>"Empty field",	"field"=>field_names[i]})
@@ -62,17 +62,17 @@ class FormData
 
 	def validate_latitude
 		float_regex = /[-+]?[0-9]*\.?[0-9]*/
-		if not float_regex === @lat
+		if false and not float_regex === @lat
 			@error_exists = true
-			@errors_found.push("msg"=>"Latitude Error","field"=>"lat")
+			@errors_found.push("msg"=>"Latitude Error #{@lat}","field"=>"lat")
 		end
 	end
 
 	def validate_longitude
 		float_regex = /[-+]?[0-9]*\.?[0-9]*/
-		if not float_regex === @long
+		if false and not float_regex === @long
 			@error_exists = true
-			@errors_found.push("msg"=>"Longitude Error","field"=>"lat")
+			@errors_found.push("msg"=>"Longitude Error #{@long}","field"=>"lat")
 		end
 	end
 

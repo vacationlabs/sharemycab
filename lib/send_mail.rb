@@ -5,7 +5,7 @@ require 'mail'
 
 # matched_trips = trips.select {|t| trip_matches?(t, current_trip)}
 
-def send_match_notification(matched_trips)
+def send_match_notifications(current_trip, matched_trips)
   response_email = "Hello,\n #{current_trip.name}\n\n \tYou are travelling to same destination as :\n"
   matched_trips.each do |trip|
     response_email+= "\t\tName :#{trip.name} \n\t\t Email Id  :#{trip.email}\n\t\t Phone Number: #{trip.phone}\n"
