@@ -70,19 +70,19 @@
 							<div class="control-group">
 							 	<label class="control-label">Name</label>
 								<div class="controls">
-									<input type="text" name="name" placeholder="your full name" />
+									<input type="text" name="name" placeholder="your full name" value="<%= @form.name %>" />
 								</div>
 							</div>							
 							<div class="control-group">
 							 	<label class="control-label">Email</label>
 								<div class="controls">
-									<input type="email" name="email" placeholder="your email address" />
+									<input type="email" name="email" placeholder="your email address" value="<%= @form.email %>"/>
 								</div>
 							</div>							
 							<div class="control-group">
 							 	<label class="control-label">Phone</label>
 								<div class="controls">
-									<input type="phone" name="phone" placeholder="your phone number" />
+									<input type="phone" name="phone" placeholder="your phone number" value="<%= @form.phone %>"/>
 								</div>
 							</div>							
 							<div class="control-group">
@@ -98,7 +98,7 @@
 							<div class="control-group">
 							 	<label class="control-label">I'm arriving at</label>
 								<div class="controls">
-									<input name="date" type="date" id="trip_date" />  on <input name="time" type="time" id="trip_time" />
+									<input name="date" type="date" id="trip_date" value="<%= @form.date %>"/>  on <input name="time" type="time" id="trip_time" value="<%= @form.time %>"/>
 								</div>
 							</div>
 							<!-- div class="control-group">
@@ -120,13 +120,13 @@
 							<div class="control-group">
 							 	<label class="control-label">I want to take a cab till</label>
 								<div class="controls">
-									<input type="text" name="address" />
+									<input type="text" name="address" value="<%= @form.address %>"/>
 								</div>
 							</div>
 							<div class="control-group">
 							 	<label class="control-label">I don't mind waiting</label>
 								<div class="controls">
-									<input type="hidden" name="time_tolerance" />
+									<input type="hidden" name="time_tolerance" value="<%= @form.time_tolerance %>"/>
 									<div id="time_slider_value">10 minutes</div>
 									<div id="time_slider"></div>
 								</div>
@@ -134,7 +134,7 @@
 							<div class="control-group">
 							 	<label class="control-label">I don't mind travelling out of my way</label>
 								<div class="controls">
-									<input type="hidden" name="km_tolerance" />
+									<input type="hidden" name="km_tolerance" value="<%= @form.km_tolerance %>"/>
 									<div id="km_slider_value">3 kms</div>
 									<div id="km_slider"></div>
 								</div>
