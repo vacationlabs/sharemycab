@@ -1,5 +1,4 @@
 body {
-	padding-top: 40px;
 	font-family: 'Open Sans', sans-serif;
 }
 
@@ -31,11 +30,11 @@ body .other-way {
 	/*text-align: center;*/
 }
 
-body .other-way .control-label {
+/*body .other-way .control-label {
 	width: 300px;
 	margin-right: 20px;
 }
-
+*/
 body .other-way form input, body .other-way form select {
 	-moz-border-radius: 0px !important;
 	-webkit-border-radius: 0px;
@@ -53,7 +52,7 @@ body .other-way form input, body .other-way form select {
 
 #time_slider, #km_slider {
 	width: 115px;
-	margin-left: 230px;
+	margin-left: 100px;
 }
 
 #time_slider_value, #km_slider_value {
@@ -62,9 +61,14 @@ body .other-way form input, body .other-way form select {
 
 body .other-way form button {
 	/*background-color: #eb4c41;*/
-	margin-left: 120px;
+	/*margin-left: 120px;*/
 }
 
 body .navbar .brand{
-	padding-left: 150px;
+	/*padding*/-left: 150px;
+}
+
+.navbar-inner .container {
+	width: 940px;
+	margin: 0 auto;
 }

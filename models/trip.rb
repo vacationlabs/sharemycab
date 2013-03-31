@@ -55,6 +55,22 @@ class Trip
 		return tripobjects
 	end
 
-	def validate
+	def self.check_airport(user1, user2)
+	  return user1.airport==user2.airport
+	end
+
+	def self.dist_tolerance_check(t1, t2)
+	  diff = location_dist_difference(t1.lat, t1.long, t2.lat, t2.long)
+	  return (diff <= t1.km_tolerance && diff <= t2.km_tolerance)
+	end
+
+
+	def self.time_tolerance_check(user1, user2)
+	  (early, late) = (user1.arrival_date_time < user2.arrival_date_time) ? [user1, user2] : [user2, user1]
+	  return (early.arrival_date_time + (early.time_tolerance*60)) > late.arrival_date_time
+	end
+
+	def self.trip_matches?(t1, t2)
+	  return (check_airport(t1, t2) && dist_tolerance_check(t1, t2) && time_tolerance_check(t1, t2))
 	end
 end
