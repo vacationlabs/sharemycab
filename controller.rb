@@ -1,6 +1,7 @@
 require 'sinatra'
 require './models/form_data.rb'
 require './lib/distance.rb'
+require './models/trip.rb'
 
 get '/' do
 	@form = FormData.new
@@ -9,21 +10,20 @@ get '/' do
 end
 
 post '/submit' do
-	@form = FormData.new
-	@form.name = params[:name]
-	@form.email = params[:email]
-	@form.airport = params[:airport]
-	@form.date = params[:date]
-	@form.time = params[:time]
-	@form.flight_no = params[:flight_no]
-	@form.time_tolerance = params[:time_tolerance]
-	@form.km_tolerance = params[:km_tolerance]
-	@form.address = params[:address]
-	@form.lat = params[:lat]
-	@form.long = params[:long]
-	@form.phone = params[:phone]
-	@form.status = params[:status]
-
+	@form = FormData.new({
+		'name' => params[:name],
+		'email' => params[:email],
+		'airport' => params[:airport],
+		'date' => params[:date],
+		'time' => params[:time],
+		'flight_no' => params[:flight_no],
+		'km_tolerance' => params[:km_tolerance],
+		'time_tolerance' => params[:time_tolerance],
+		'address' => params[:address],
+		'lat' => params[:lat],
+		'long' => params[:long],
+		'phone' => params[:phone]
+	})
 	@form.validate_empty
 	@form.validate_email
 	@form.validate_km_tolerance
@@ -31,13 +31,13 @@ post '/submit' do
 	@form.validate_longitude
 	@form.validate_latitude
 	@form.validate_phone
-
-	puts @form.time
-	puts @form.date
+	@form.validate_date_time
 
 	if @form.error_exists
 		erb :form
 	else
+		trip = @form.to_trip
+		trip.save
 		erb :done
 	end
 end

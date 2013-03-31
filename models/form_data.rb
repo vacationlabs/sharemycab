@@ -1,9 +1,16 @@
+require 'bigdecimal'
+
 class FormData
 	attr_accessor :name,:email,:airport,:date,:time,:flight_no,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status, :error, :errors_found, :error_exists
-	def initialize
+
+	def initialize(opts={})
+		opts.each_pair do |k, v|
+			if self.respond_to?("#{k}=")
+				self.send("#{k}=", v)
+			end
+		end
 		@airport_list = []
 		@errors_found = []
-		name,email,airport,date,time,flight_no,time_tolerance,km_tolerance,address,lat,long,phone,status = ""
 		error_exists = false
 	end
 
@@ -12,10 +19,10 @@ class FormData
 	end
 
 	def validate_empty
-		field_names = ["name","email","airport","date","time","flight_no","time_tolerance","km_tolerance","address","lat","long","phone","status"]
-		fields = [name,email,airport,date,time,flight_no,time_tolerance,km_tolerance,address,lat,long,phone,status]
+		field_names = ["name","email","airport","date","time","flight_no","time_tolerance","km_tolerance","address","lat","long","phone"]
+		fields = [name,email,airport,date,time,flight_no,time_tolerance,km_tolerance,address,lat,long,phone]
 		(0..fields.length-1).each do |i|
-				if fields[i].length <= 0
+				if (fields[i] || '').length == 0
 					@errors_found.push({"msg"=>"Empty field",	"field"=>field_names[i]})
 					@error_exists = true
 				end
@@ -31,18 +38,18 @@ class FormData
 	end
 
 	def validate_km_tolerance
-		integer_regex = /[-+]?[0-9]+/
+		integer_regex = /[0-9]+/
 		if not (integer_regex === km_tolerance)
 			@error_exists = true
 			@errors_found.push("msg"=>"Not Valid","field"=>"km_tolerance")
-		elsif not ((time_tolerance.to_i >= 0) and (time_tolerance.to_i <= 20))
+		elsif not ((km_tolerance.to_i >= 0) and (km_tolerance.to_i <= 20))
 			@error_exists = true
 			@errors_found.push("msg"=>"Not in range 0 - 20","field"=>"km_tolerance")
 		end
 	end
 
 	def validate_time_tolerance
-		integer_regex = /[-+]?[0-9]+/
+		integer_regex = /[0-9]+/
 		puts time_tolerance
 		if not (integer_regex === time_tolerance)
 			@error_exists = true
@@ -78,37 +85,17 @@ class FormData
 	end 
 
 	def validate_date_time
-		hh,mm = time.split(':')
-		year, month, day = date.split('-')
-		if not ( is_integer(hh) and is_integer(mm) )
+		now = Time.now
+		adt = Time.parse("#{@date} #{@time} +0530")
+		if(now + 2*60*60>adt)
 			@error_exists = true
-			@errors_found.push("msg"=>"Invalid Time Value ","field"=>"time")
-			if not (is_integer(year) and is_integer(month) and is_integer(day))
-				@error_exists = true
-				@errors_found.push("msg"=>"Invalid Date Value","field"=>"date")
-			end
-		end
-
-		if year.to_i <= Time.now.year.to_i
-			@error_exists = true
-			@errors_found.push("msg"=>"Date is past","field"=>"date")
-		elsif month.to_i <= Time.now.month.to_i
-			@error_exists = true
-			@errors_found.push("msg"=>"Date is past","field"=>"date")
-		elsif day.to_i <= Time.now.day.to_i
-			@error_exists = true
-			@errors_found.push("msg"=>"Date is past","field"=>"date")
-		elsif hh.to_i <= Time.now.hour.to_i
-			@error_exists = true
-			@errors_found.push("msg"=>"Time is past","field"=>"time")
-		elsif mm.to_i <= Time.now.hour.to_i
-			@error_exists = true
-			@errors_found.push("msg"=>"Time is past","field"=>"time")
+			@errors_found.push("msg" => "Arrival time should be at least two hours away", "field" => "time")
 		end
 	end
-	def send_to_db
-		#arrival_datetime = 
-		data = [name,email,airport,arrival_datetime,flight,time_tolarance.to_i,km_tolarance.to_i,address,lat.to_f,long.to_f, phone,status]
+
+	def to_trip
+		arrival_datetime = Time.parse("#{@date} #{@time} +0530")
+		Trip.new(name, email, airport, arrival_datetime, flight_no, time_tolerance.to_i, km_tolerance.to_i, address, BigDecimal.new(lat), BigDecimal.new(long), phone)
 	end
 end
 
