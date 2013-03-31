@@ -1,0 +1,55 @@
+body {
+	padding-top: 40px;
+	font-family: 'Open Sans', sans-serif;
+}
+
+body h1, h2, h3, h4, h5, h6 {
+	font-family: 'Arvo', serif;
+	font-weight: normal;		
+}
+
+body .easy-way {
+	color: #f0f0f0;
+	background-color: #eb4c41;
+	padding-top: 10px;
+	padding-bottom: 50px;
+}
+
+body .easy-way h2 {
+	text-align: center;
+}
+
+body .other-way h2 {
+	text-align: center;
+	margin-bottom: 40px;
+	padding-top: 10px;
+}
+
+body .other-way {
+	color: #f0f0f0;
+	background-color: #316a88;
+	/*text-align: center;*/
+}
+
+body .other-way .control-label {
+	width: 300px;
+	margin-right: 20px;
+}
+
+body .other-way form input[type="text"] {
+	border-radius: 0px;
+	height: 30px;
+}
+
+body .other-way form  #arrival_inputs {
+	width: 35px;	
+}
+
+body .other-way form button {
+	/*background-color: #eb4c41;*/
+	margin-left: 120px;
+}
+
+body .navbar .brand{
+	padding-left: 150px;
+}
