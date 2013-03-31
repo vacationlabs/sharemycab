@@ -42,9 +42,9 @@ class FormData
 		if not (integer_regex === km_tolerance)
 			@error_exists = true
 			@errors_found.push("msg"=>"Not Valid","field"=>"km_tolerance")
-		elsif not ((km_tolerance.to_i >= 0) and (km_tolerance.to_i <= 20))
+		elsif not ((km_tolerance.to_i >= 0) and (km_tolerance.to_i <= 10))
 			@error_exists = true
-			@errors_found.push("msg"=>"Not in range 0 - 20","field"=>"km_tolerance")
+			@errors_found.push("msg"=>"Not in range 0 - 10","field"=>"km_tolerance")
 		end
 	end
 

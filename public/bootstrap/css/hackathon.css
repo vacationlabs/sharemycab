@@ -36,13 +36,28 @@ body .other-way .control-label {
 	margin-right: 20px;
 }
 
-body .other-way form input[type="text"] {
-	border-radius: 0px;
+body .other-way form input, body .other-way form select {
+	-moz-border-radius: 0px !important;
+	-webkit-border-radius: 0px;
+	border-radius: 0px !important;
 	height: 30px;
 }
 
-body .other-way form  #arrival_inputs {
-	width: 35px;	
+#trip_date {
+	width: 8em;
+}
+
+#trip_time {
+	width: 6em;
+}
+
+#time_slider, #km_slider {
+	width: 115px;
+	margin-left: 230px;
+}
+
+#time_slider_value, #km_slider_value {
+	float: left;
 }
 
 body .other-way form button {

@@ -3,10 +3,15 @@ require './models/form_data.rb'
 require './lib/distance.rb'
 require './models/trip.rb'
 
+AIRPORTS = {
+	'GOI' => 'Goa, Dabolim Airport',
+	'DEL' => 'Delhi, Indira Gandhi International Airport'
+}
+
 get '/' do
 	@form = FormData.new
   puts @form.inspect
-	erb :form
+	erb :landing
 end
 
 post '/submit' do
@@ -34,7 +39,7 @@ post '/submit' do
 	@form.validate_date_time
 
 	if @form.error_exists
-		erb :form
+		erb :landing
 	else
 		trip = @form.to_trip
 		trip.save
