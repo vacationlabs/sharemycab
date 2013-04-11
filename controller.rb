@@ -196,9 +196,20 @@ post '/submit' do
 	puts "======================= BEFORE SABING"
 	trip = @form.to_trip
 	trip.save
+
+	##select * from trip where id= (select  max(id) from trip);
+
+
+
+
+
+
 	possible_matches = trip.match_trips
 	puts "POSSIBLE MATCHES ====================== #{possible_matches.inspect}"
-	actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t)}
+
+
+
+	actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t) }
 	if actual_matches.length>0
 		puts "======================== #{actual_matches.inspect}"
 		send_match_notifications(trip, actual_matches)

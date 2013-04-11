@@ -21,7 +21,7 @@ class Trip
 	end
 
 	def save
-		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharecab_db', :user => "sharecab", :password => "sharecab")
+		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharemycab', :user => "sharemycab", :password => "sharemycab")
 		adt = @arrival_datetime.getutc.strftime('%F %T')
 		# @arrival_datetime = arrival_datetime.utc
 		# TODO -- Prevent SQL Injection
@@ -29,20 +29,23 @@ class Trip
 	end
 
 	def self.fetch(id)
-		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharecab_db', :user => "sharecab", :password => "sharecab")
+		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharemycab', :user => "sharemycab", :password => "sharemycab")
 		sql = "Select name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where id = #{id}"
 		res = conn.exec(sql)
+
+		#puts "MAX VALUE FROM DB=======================================================#{res.inspect}"
 		b = res.values[0]
 		time = Time.parse(b[3] + "UTC").getlocal("+05:30")
 		return Trip.new(b[0],b[1],b[2],time,b[4],b[5],b[6],b[7],b[8],b[9],b[10],b[11])
 	end
 
 	def match_trips
-		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharecab_db', :user => "sharecab", :password => "sharecab")
+		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharemycab', :user => "sharemycab", :password => "sharemycab")
 		usertime = Time.new
 		usertime = @arrival_datetime.getutc.strftime("%F %T")  
 		sql = "Select name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where airport = '#{@airport}' and abs(extract(epoch from (timestamp '#{usertime}' - arrival_datetime))) < (#{@time_tolerance}*60)"
 		res = conn.exec(sql)
+		
 		tripobjects = []
 		a = res.values
 		time = Time.new
@@ -70,7 +73,11 @@ class Trip
 	  return (early.arrival_datetime + (early.time_tolerance*60)) > late.arrival_datetime
 	end
 
+	def self.trip_uniqueness(t1,t2)
+		return (t1.email!=t2.email)
+	end
+
 	def self.trip_matches?(t1, t2)
-	  return (check_airport(t1, t2) && dist_tolerance_check(t1, t2) && time_tolerance_check(t1, t2))
+	  return (check_airport(t1, t2) && dist_tolerance_check(t1, t2) && time_tolerance_check(t1, t2) && trip_uniqueness(t1,t2))
 	end
 end
