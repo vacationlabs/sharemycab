@@ -7,6 +7,24 @@ body h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;		
 }
 
+/* Footer CSS */
+body .footer {
+	color: #f0f0f0;
+	background-color: #1a1a1a;
+	padding-left: 30px;	
+	padding-top: 10px;
+	padding-bottom: 50px;	
+}
+
+body .footer h2 {
+	text-align: center;
+}
+
+body .footer p {
+	text-align: justify;
+}
+
+/* Easy Way CSS*/
 body .easy-way {
 	color: #f0f0f0;
 	background-color: #eb4c41;
@@ -17,6 +35,8 @@ body .easy-way {
 body .easy-way h2 {
 	text-align: center;
 }
+
+/* Other Way CSS */
 
 body .other-way h2 {
 	text-align: center;

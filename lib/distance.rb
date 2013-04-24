@@ -8,14 +8,14 @@ def to_radians(degrees)
 end
 
 ##
-def location_dist_difference(lat1,lon1,lat2,lon2)
-	dLat = to_radians(lat2-lat1)
-	dLon = to_radians(lon2-lon1)
+def location_dist_difference(lat1,lon1,lat2,lon2)	
+	lat_diff = to_radians(lat2-lat1)
+	lon_diff = to_radians(lon2-lon1)
 	lat1 = to_radians(lat1)
 	lat2 = to_radians(lat2)
 
 	#‘haversine’ formula
-	a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2)
+	a = Math.sin(lat_diff/2) * Math.sin(lat_diff/2) + Math.sin(lon_diff/2) * Math.sin(lon_diff/2) * Math.cos(lat1) * Math.cos(lat2)
 	c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
 	d = RADIUS * c
 	return d

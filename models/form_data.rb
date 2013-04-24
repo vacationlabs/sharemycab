@@ -10,10 +10,10 @@ class FormData
 			end
 		end
 		@airport_list = []
-		@errors_found = []
+		@errors_found = []		
 		error_exists = false
 	end
-
+	
 	def push_airport(airport_list)
 		@airport_list = airport_list
 	end

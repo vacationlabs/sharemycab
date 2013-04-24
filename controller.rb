@@ -151,8 +151,10 @@ AIRPORTS = {
 	'WGC'=>'Warangal,Warangal Airport (WGC)'
 }
 
+SUCCESS = []
+
 get '/' do
-	@form = FormData.new
+	@form = FormData.new	
 	erb :landing
 end
 
@@ -171,6 +173,10 @@ post '/submit' do
 		'long' => params[:long],
 		'phone' => params[:phone]
 	})
+
+	SUCCESS = [];
+
+	# Validations
 	@form.validate_empty
 	@form.validate_email
 	@form.validate_km_tolerance
@@ -178,43 +184,41 @@ post '/submit' do
 	@form.validate_phone
 	@form.validate_date_time
 
-	return (erb :landing) if @form.error_exists
+	return (erb :landing) if not @form.errors_found.empty?
 
-	puts "======================= BEFORE CALLING API"
+	begin
+		# Calling the google maps api
+		(lat, long) = get_lat_long_from_google_object_key(params[:destination_ref_key])
+		@form.lat = lat
+		@form.long = long
+		@form.validate_latitude
+		@form.validate_longitude
+	rescue StandardError => e
+		@form.errors_found.push("There was an error with your drop off point #{e}")
+		@form.errors_found.push("Search for another location in 'I want to take a cab till'")
+		return (erb :landing)
+	end	
 
-	(lat, long) = get_lat_long_from_google_object_key(params[:destination_ref_key])
-	@form.lat = lat
-	@form.long = long
-	@form.validate_longitude
-	@form.validate_latitude
+	
 
-	puts "======================= AFTER CALLING API #{@form.error_exists}"
-
-	return (erb :landing) if @form.error_exists
-
-
-	puts "======================= BEFORE SABING"
 	trip = @form.to_trip
-	trip.save
+	if trip.save
+		# Send back to the page with cleared fields and some text
+		SUCCESS = ["We've successfully saved your details", "Now hold on tight. We'll mail you if there are other people travelling to the same area"]
 
-	##select * from trip where id= (select  max(id) from trip);
+		# @form = FormData.new()
 
+		redirect '/'
 
+		# Now send out emails if any matched trips are present
+		possible_matches = trip.match_trips
 
+		actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t) }
+		if actual_matches.length > 0
 
-
-
-	possible_matches = trip.match_trips
-	puts "POSSIBLE MATCHES ====================== #{possible_matches.inspect}"
-
-
-
-	actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t) }
-	if actual_matches.length>0
-		puts "======================== #{actual_matches.inspect}"
-		send_match_notifications(trip, actual_matches)
+			send_match_notifications(trip, actual_matches)
+		end
 	end
-	erb :done
 end
 
 
