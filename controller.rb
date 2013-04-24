@@ -205,19 +205,9 @@ post '/submit' do
 	if trip.save
 		# Send back to the page with cleared fields and some text
 		SUCCESS = ["We've successfully saved your details", "Now hold on tight. We'll mail you if there are other people travelling to the same area"]
-
-		# @form = FormData.new()
-
-		redirect '/'
-
 		# Now send out emails if any matched trips are present
-		possible_matches = trip.match_trips
-
-		actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t) }
-		if actual_matches.length > 0
-
-			send_match_notifications(trip, actual_matches)
-		end
+		send_mail(trip)
+		redirect '/'		
 	end
 end
 
@@ -257,4 +247,12 @@ def get_lat_long_from_google_object_key(key)
 		long = response["result"]["geometry"]["location"]["lng"]
 	end
 	return [lat.to_s, long.to_s]
+end
+
+def send_mail(trip)
+	possible_matches = trip.match_trips
+	actual_matches = possible_matches.select {|t| Trip.trip_matches?(trip, t) }
+	if actual_matches.length > 0
+		send_match_notifications(trip, actual_matches)
+	end
 end
