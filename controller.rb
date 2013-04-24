@@ -151,14 +151,12 @@ AIRPORTS = {
 	'WGC'=>'Warangal,Warangal Airport (WGC)'
 }
 
-SUCCESS = []
-
 get '/' do
 	@form = FormData.new	
 	erb :landing
 end
 
-post '/submit' do
+post '/submit' do	
 	@form = FormData.new({
 		'name' => params[:name],
 		'email' => params[:email],
@@ -174,8 +172,6 @@ post '/submit' do
 		'phone' => params[:phone]
 	})
 
-	SUCCESS = [];
-
 	# Validations
 	@form.validate_empty
 	@form.validate_email
@@ -184,7 +180,15 @@ post '/submit' do
 	@form.validate_phone
 	@form.validate_date_time
 
-	return (erb :landing) if not @form.errors_found.empty?
+	if not @form.errors_found.empty?
+		content_type :json
+		status 500
+		message = ""
+		@form.errors_found.each do |error|
+			message += "#{error['field']}: cannot be #{error['msg']}, "
+		end
+		return message		
+	end
 
 	begin
 		# Calling the google maps api
@@ -194,20 +198,23 @@ post '/submit' do
 		@form.validate_latitude
 		@form.validate_longitude
 	rescue StandardError => e
-		@form.errors_found.push("There was an error with your drop off point #{e}")
-		@form.errors_found.push("Search for another location in 'I want to take a cab till'")
-		return (erb :landing)
+		content_type :json
+		status 500
+		message = ""
+		@form.errors_found.each do |error|
+			message += "#{error} "
+		end
+		return message
 	end	
 
-	
-
 	trip = @form.to_trip
-	if trip.save
-		# Send back to the page with cleared fields and some text
-		SUCCESS = ["We've successfully saved your details", "Now hold on tight. We'll mail you if there are other people travelling to the same area"]
+	if trip.save		
 		# Now send out emails if any matched trips are present
 		send_mail(trip)
-		redirect '/'
+		content_type :json
+	  return { :saved => "true" }.to_json
+	else
+		status 500
 	end
 end
 

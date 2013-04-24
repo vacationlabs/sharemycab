@@ -26,8 +26,8 @@ def send_match_notifications(current_trip, matched_trips)
     end
        
     Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
-    Net::SMTP.start('smtp.gmail.com', 587, 'gmail.com', 'ashwin@vacationlabs.com', 'Ashwin09', :login) do |smtp|
-      smtp.send_message(mail.to_s, 'ashwin@vacationlabs.com', current_trip.email)
+    Net::SMTP.start('smtp.gmail.com', 587, 'gmail.com', 'services@vacationlabs.com', 'Lin59Mas', :login) do |smtp|
+      smtp.send_message(mail.to_s, 'services@vacationlabs.com', current_trip.email)
     end
  end   
 end

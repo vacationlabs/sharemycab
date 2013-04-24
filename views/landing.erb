@@ -67,42 +67,36 @@
 						<h2> Start Now! </h2>						
 					</div>
 				</div>
-		
-				<% if not SUCCESS.empty? %>
-					<div class="row-fluid">						
-						<div class="span6 offset3">
-							<div class="alert">
-								<h4>Success!</h4>
-								<ul>
-								<% SUCCESS.each do |message|%>
-									<li><%= message %></li>
-								<% end %>
-								</ul>
-							</div>
-						</div>
-					</div>
-				<% end%>
 
-				<% if not @form.errors_found.empty? %>
-					<div class="row-fluid">						
-						<div class="span6 offset3">
-							<div class="alert">
-								<h4>Whoops! Looks like something went wrong...</h4>
+				
+				<div class="row-fluid">
+					<div class="span6 offset3">
+						<div id="error-box" class="alert">
+							<h4>Whoops! Looks like something went wrong...</h4>
+							<div id="error-message"></div>
+						</div>
+					</div>
+				</div>
+
+				<div id="info-box" class="row-fluid">
+					<div class="span6 offset3">
+						<div class="alert">
+							<h4>Success!!</h4>
+							<div >
 								<ul>
-								<% @form.errors_found.each do |error|%>
-									<li>Error: <%= error["msg"] %> <%= error["field"] %></li>
-								<% end %>
+									<li>We've successfully saved your details</li>
+									<li>Now hold on tight. We'll mail you if there are other people travelling to the same area</li>
 								</ul>
 							</div>
 						</div>
 					</div>
-				<% end%>
+				</div>
 
 
 				<div class="row-fluid">
 					<div class="span3"></div>
 					<div class="span6">
-						<form class="form-horizontal" method="post" action="/submit">							
+						<form id="submit-form" class="form-horizontal">
 							<div class="control-group">
 							 	<label class="control-label">Name</label>
 								<div class="controls">
@@ -180,7 +174,7 @@
 							</div>
 							<div class="control-group">
 								<div class="controls">									
-									<button type="submit" class="btn btn-large btn-primary">Submit</button>
+									<a id="save-button" class="btn btn-large btn-primary">Submit</a>
 								</div>
 							</div>							
 						</form>
@@ -215,6 +209,32 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
+
+			// $("#save-button").click(function(){
+			// 	console.log($("#submit-form").serialize());
+			// });
+			$("#info-box").hide();
+			$("#error-box").hide();
+
+			$("#save-button").click(function(){
+				$(this).attr('disabled', true);
+				$.ajax({
+				url: "submit",
+				data: $("#submit-form").serialize(),
+				dataType: 'JSON',
+				method: 'POST'
+				}).success(function(data){
+					$("#info-box").fadeIn("2000").delay("4000").fadeOut("2000");
+					$("#save-button").attr('disabled', false);
+					$("#submit-form").find("input[type=text], input[type=email], input[type=date], input[type=time], input[type=phone]").val("");
+					$("#error-box").hide();
+				}).error(function(data){
+					$("#error-box").show();
+					$("div#error-message").text(data.responseText);					
+					$("#save-button").attr('disabled', false);
+				});
+			});
+
 			$("input[name=date]").datepicker({
 				'dateFormat' : 'yy-mm-dd',
 				'minDate' : new Date()
