@@ -207,7 +207,7 @@ post '/submit' do
 		SUCCESS = ["We've successfully saved your details", "Now hold on tight. We'll mail you if there are other people travelling to the same area"]
 		# Now send out emails if any matched trips are present
 		send_mail(trip)
-		redirect '/'		
+		redirect '/'
 	end
 end
 

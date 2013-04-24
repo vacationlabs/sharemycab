@@ -31,6 +31,8 @@ body .how-it-works h3 {
 body .info-section {
 	background-color: #ededed;
 	padding: 30px 40px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
 }
 
 body .info-section h2{
@@ -45,6 +47,10 @@ body .info-section p{
 
 body .header {
 	background-color: #ededed;
+}
+
+body .header img {
+	padding: 10px;
 }
 
 /* Footer CSS */
@@ -67,6 +73,11 @@ body .easy-way {
 	color: #f0f0f0;
 	background-color: #eb4c41;
 	padding: 30px 40px;
+}
+
+body .easy-way .well {
+	color: #eb4c41;
+	margin-bottom: 0px;
 }
 
 body .easy-way h2 {
