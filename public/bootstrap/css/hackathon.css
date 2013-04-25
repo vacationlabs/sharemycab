@@ -7,13 +7,51 @@ body h1, h2, h3, h4, h5, h6 {
 	font-weight: normal;		
 }
 
+/* How it works CSS*/
+
+body .how-it-works {	
+	padding: 30px 40px;
+	background-color: #316a88;
+	color: #f0f0f0;
+}
+
+body .how-it-works h2 {
+	text-align: center;
+}
+
+body .how-it-works h3 {
+	padding: 0px 20px;
+	background-color: #eeeeee;
+	color: #eb4c41;
+	display: inline-block;
+}
+
+/* Info section CSS*/
+
+body .info-section {
+	background-color: #ededed;
+	padding: 30px 40px;
+}
+
+body .info-section h2{
+	color: #eb4c41;
+}
+
+body .info-section p{
+	color: #316a88;
+}
+
+/* Header Section CSS*/
+
+body .header {
+	background-color: #ededed;
+}
+
 /* Footer CSS */
 body .footer {
 	color: #f0f0f0;
 	background-color: #1a1a1a;
-	padding-left: 30px;	
-	padding-top: 10px;
-	padding-bottom: 50px;	
+	padding: 20px 40px;
 }
 
 body .footer h2 {
@@ -28,8 +66,7 @@ body .footer p {
 body .easy-way {
 	color: #f0f0f0;
 	background-color: #eb4c41;
-	padding-top: 10px;
-	padding-bottom: 50px;
+	padding: 30px 40px;
 }
 
 body .easy-way h2 {
@@ -50,11 +87,6 @@ body .other-way {
 	/*text-align: center;*/
 }
 
-/*body .other-way .control-label {
-	width: 300px;
-	margin-right: 20px;
-}
-*/
 body .other-way form input, body .other-way form select {
 	-moz-border-radius: 0px !important;
 	-webkit-border-radius: 0px;
