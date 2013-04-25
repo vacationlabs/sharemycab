@@ -23,7 +23,7 @@ class FormData
 		fields = [name,email,airport,date,time,time_tolerance,km_tolerance,address,phone]
 		(0..fields.length-1).each do |i|
 				if (fields[i] || '').length == 0
-					@errors_found.push({"msg"=>"Empty field",	"field"=>field_names[i]})
+					@errors_found.push({"msg"=>"Empty",	"field"=>field_names[i]})
 					@error_exists = true
 				end
 		end
