@@ -185,7 +185,7 @@ post '/submit' do
 		status 500
 		message = ""
 		@form.errors_found.each do |error|
-			message += "#{error['field']}: cannot be #{error['msg']}, "
+			message += "#{error['field'].capitalize}: is #{error['msg'].downcase}, "
 		end
 		return message		
 	end
