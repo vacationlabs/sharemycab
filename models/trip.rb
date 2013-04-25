@@ -2,6 +2,11 @@ require 'rubygems'
 require 'pg'
 require 'time'
 
+set :db_host, ENV['DB_HOST'] || "localhost"
+set :db_name, ENV['DB_NAME'] || "sharemycab"
+set :db_user, ENV['DB_USER'] || "sharemycab"
+set :db_password, ENV['DB_PASSWORD'] || "sharemycab"
+
 class Trip
 	attr_accessor :id,:name,:email,:airport,:arrival_datetime,:flight_no,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status
 
@@ -18,10 +23,11 @@ class Trip
 		@long = long	
 		@phone = phone
 		@status = status
+		@application = Sinatra::Application
 	end
 
-	def save
-		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharemycab', :user => "sharemycab", :password => "sharemycab")
+	def save		
+		conn = PG::Connection.open(:host => @application.settings.db_host,:dbname => @application.settings.db_name, :user => @application.settings.db_user, :password => @application.settings.db_password)
 		adt = @arrival_datetime.getutc.strftime('%F %T')
 		# @arrival_datetime = arrival_datetime.utc
 		# TODO -- Prevent SQL Injection
@@ -29,7 +35,7 @@ class Trip
 	end
 
 	def self.fetch(id)
-		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharemycab', :user => "sharemycab", :password => "sharemycab")
+		conn = PG::Connection.open(:host => @application.settings.db_host,:dbname => @application.settings.db_name, :user => @application.settings.db_user, :password => @application.settings.db_password)
 		sql = "Select name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where id = #{id}"
 		res = conn.exec(sql)
 
@@ -40,7 +46,7 @@ class Trip
 	end
 
 	def match_trips
-		conn = PG::Connection.open(:host => "localhost",:dbname => 'sharemycab', :user => "sharemycab", :password => "sharemycab")
+		conn = PG::Connection.open(:host => @application.settings.db_host,:dbname => @application.settings.db_name, :user => @application.settings.db_user, :password => @application.settings.db_password)
 		usertime = Time.new
 		usertime = @arrival_datetime.getutc.strftime("%F %T")  
 		sql = "Select name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where airport = '#{@airport}' and abs(extract(epoch from (timestamp '#{usertime}' - arrival_datetime))) < (#{@time_tolerance}*60)"

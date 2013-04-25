@@ -151,8 +151,8 @@ AIRPORTS = {
 	'WGC'=>'Warangal,Warangal Airport (WGC)'
 }
 
-get '/' do
-	@form = FormData.new	
+get '/' do	
+	@form = FormData.new
 	erb :landing
 end
 
