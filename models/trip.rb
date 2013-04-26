@@ -26,7 +26,7 @@ class Trip
 		@application = Sinatra::Application
 	end
 
-	def save		
+	def save
 		conn = PG::Connection.open(:host => @application.settings.db_host,:dbname => @application.settings.db_name, :user => @application.settings.db_user, :password => @application.settings.db_password)
 		adt = @arrival_datetime.getutc.strftime('%F %T')
 		# @arrival_datetime = arrival_datetime.utc

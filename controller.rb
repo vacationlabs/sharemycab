@@ -215,6 +215,11 @@ post '/submit' do
 	  return { :saved => "true" }.to_json
 	else
 		status 500
+		message = ""
+		trip.each do |error|
+			message += "#{error} "
+		end
+		return error
 	end
 end
 

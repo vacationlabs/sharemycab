@@ -60,6 +60,10 @@ body .footer {
 	padding: 20px 40px;
 }
 
+body .footer img{
+	margin: 5px;
+}
+
 body .footer h2 {
 	text-align: center;
 }

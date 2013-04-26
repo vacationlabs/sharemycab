@@ -211,22 +211,44 @@
 				</div>
 			</div>
 
-			<div class="footer">				
-				<h2> Meet The Team</h2>
+			<div class="footer">								
 				<div class="row-fluid">
-					<div class="span4">
+					<div class="span5">
 						<div class="row-fluid">
-							<div class="span4">
-								<img src="http://placehold.it/50x50" class="img-circle">
-								<img src="http://placehold.it/50x50" class="img-circle">
+							<div class="span6">
+								<h4>The Hackers</h4>
+								<div class="row-fluid">
+									<div class="span12">
+										<img src="images/shanker.png" data-toggle="tooltip" title="Shanker Naik" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">
+										<img src="images/rajdeep.png" data-toggle="tooltip" title="Rajdeep Mandrekar" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">									
+									</div>
+								</div>
+								<div class="row-fluid">
+									<div class="span12">
+										<img src="images/tanay.png" data-toggle="tooltip" title="Tanay Prabhudessai" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">
+										<img src="images/ankit.png" data-toggle="tooltip" title="Ankit Jain" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">
+									</div>
+								</div>			
 							</div>
-							<div class="span4">
-								<img src="http://placehold.it/50x50" class="img-circle">
-								<img src="http://placehold.it/50x50" class="img-circle">
+							<div class="span6">
+								<h4>The Vacationlabs Team</h4>
+								<div class="row-fluid">
+									<div class="span12">
+										<img src="images/saurabh2.png" data-toggle="tooltip" title="Saurabh Nanda" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">
+										<img src="images/bhagyesh.png" data-toggle="tooltip" title="Bhagyesh Ghanekar" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">
+									</div>
+								</div>
+								<div class="row-fluid">
+									<div class="span12">
+										<img src="images/ashwin.png" data-toggle="tooltip" title="Ashwin Saval" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">
+										<img src="images/vandita2.png" data-toggle="tooltip" title="Vandita Kane" height="70" width="70" style="max-height: 70px; max-width:70px;" class="img-circle">
+									</div>
+								</div>
 							</div>
-						</div>
+						</div>					  
 					</div>
-					<div class="span6">
+					<div class="span7">
+						<h2> Meet The Team</h2>
 						<p>
 							This application was the result of a rigorous 48 hour <a target="_blank" href="http://www.vacationlabs.com/hackathon">hackathon</a> organized by <a target="_blank" href="http://www.vacationlabs.com">Vacationlabs</a> at Porvorim, Goa. Shanker, Rajdeep, Tanay and Ankit sacrificed a weekend in the name of technology and building something for the greater good of us humans ! :).
 						</p>
@@ -291,19 +313,28 @@
 				}
 			});
 
-			$( "#address" ).autocomplete({
+			var address_with_reference = [];
+			$( "#address" ).autocomplete({				
 				source: function(request, responseFn) {					
 					$.ajax({
 					url: "/places/"+$("#address").val()
 					}).success(function(data){
-						var availableAddress = [];						
-						$.each(data["address_prediction"], function(value, key){
-							availableAddress.push(key.address);
+						var availableAddress = [];
+						console.log(data.address_prediction);
+						$.each(data["address_prediction"], function(index, value){							
+							availableAddress.push(value.address);
+							address_with_reference.push(value)
 						});
 						responseFn(availableAddress);
 					});
 				},
 				select: function(event,ui) {
+					console.log(ui.item);
+					$.each(address_with_reference,function(i, v){
+				    if (ui.item.value == v.address){
+				      $('#reference_key').val(v["reference_key"]);
+				    }
+				  });
 					$(this).val("ui.item.value");					
 				}
 			});			
