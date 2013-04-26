@@ -163,7 +163,6 @@ post '/submit' do
 		'airport' => params[:airport],
 		'date' => params[:date],
 		'time' => params[:time],
-		'flight_no' => params[:flight_no],
 		'km_tolerance' => params[:km_tolerance],
 		'time_tolerance' => params[:time_tolerance],
 		'address' => params[:address],

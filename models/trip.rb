@@ -8,14 +8,13 @@ set :db_user, ENV['DB_USER'] || "sharemycab"
 set :db_password, ENV['DB_PASSWORD'] || "sharemycab"
 
 class Trip
-	attr_accessor :id,:name,:email,:airport,:arrival_datetime,:flight_no,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status
+	attr_accessor :id,:name,:email,:airport,:arrival_datetime,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status
 
-	def initialize(name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phone,status = "active")
+	def initialize(name,email,airport,arrival_datetime,time_tolerance,km_tolerance,address,lat,long,phone,status = "active")
 		@name = name
 		@email = email
 		@airport = airport
 		@arrival_datetime = arrival_datetime
-		@flight_no = flight_no
 		@time_tolerance = time_tolerance
 		@km_tolerance = km_tolerance
 		@address = address
@@ -26,31 +25,31 @@ class Trip
 		@application = Sinatra::Application
 	end
 
-	def save
+	def save		
 		conn = PG::Connection.open(:host => @application.settings.db_host,:dbname => @application.settings.db_name, :user => @application.settings.db_user, :password => @application.settings.db_password)
 		adt = @arrival_datetime.getutc.strftime('%F %T')
 		# @arrival_datetime = arrival_datetime.utc
 		# TODO -- Prevent SQL Injection
-		res = conn.exec("Insert into Trip (name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status) values('#{@name}','#{@email}','#{@airport}','#{adt}','#{@flight_no}',#{@time_tolerance},#{@km_tolerance},'#{@address}',#{@lat},#{@long},'#{@phone}','#{@status}');")
+		res = conn.exec_params("Insert into Trip (name,email,airport,arrival_datetime,time_tolerance,km_tolerance,address,lat,long,phonenumber,status) "+
+													 "values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);",
+													 [@name, @email, @airport, adt, @time_tolerance, @km_tolerance, @address, @lat, @long, @phone, @status])
 	end
 
 	def self.fetch(id)
 		conn = PG::Connection.open(:host => @application.settings.db_host,:dbname => @application.settings.db_name, :user => @application.settings.db_user, :password => @application.settings.db_password)
-		sql = "Select name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where id = #{id}"
-		res = conn.exec(sql)
+		res = conn.exec_params("Select name,email,airport,arrival_datetime,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where id = $1", [id])
 
 		#puts "MAX VALUE FROM DB=======================================================#{res.inspect}"
 		b = res.values[0]
 		time = Time.parse(b[3] + "UTC").getlocal("+05:30")
-		return Trip.new(b[0],b[1],b[2],time,b[4],b[5],b[6],b[7],b[8],b[9],b[10],b[11])
+		return Trip.new(b[0],b[1],b[2],time,b[4],b[5],b[6],b[7],b[8],b[9],b[10])
 	end
 
 	def match_trips
 		conn = PG::Connection.open(:host => @application.settings.db_host,:dbname => @application.settings.db_name, :user => @application.settings.db_user, :password => @application.settings.db_password)
 		usertime = Time.new
-		usertime = @arrival_datetime.getutc.strftime("%F %T")  
-		sql = "Select name,email,airport,arrival_datetime,flight_no,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where airport = '#{@airport}' and abs(extract(epoch from (timestamp '#{usertime}' - arrival_datetime))) < (#{@time_tolerance}*60)"
-		res = conn.exec(sql)
+		usertime = @arrival_datetime.getutc.strftime("%F %T")		
+		res = conn.exec_params("Select name,email,airport,arrival_datetime,time_tolerance,km_tolerance,address,lat,long,phonenumber,status from Trip where airport = '#{@airport}' and abs(extract(epoch from (timestamp '#{usertime}' - arrival_datetime))) < (#{@time_tolerance}*60)")
 		
 		tripobjects = []
 		a = res.values
@@ -58,7 +57,7 @@ class Trip
 
 		res.values.each do |b|
 			time = Time.parse(b[3] + "UTC").getlocal("+05:30")
-			tripobjects.push(Trip.new(b[0],b[1],b[2],time,b[4],b[5].to_i,b[6].to_i,b[7],BigDecimal.new(b[8]), BigDecimal.new(b[9]), b[10],b[11]))
+			tripobjects.push(Trip.new(b[0],b[1],b[2],time,b[4].to_i,b[5].to_i,b[6],BigDecimal.new(b[7]), BigDecimal.new(b[8]), b[9],b[10]))
 		end
 
 		return tripobjects

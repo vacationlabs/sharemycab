@@ -1,7 +1,7 @@
 require 'bigdecimal'
 
 class FormData
-	attr_accessor :name,:email,:airport,:date,:time,:flight_no,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status, :error, :errors_found, :error_exists
+	attr_accessor :name,:email,:airport,:date,:time,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status, :error, :errors_found, :error_exists
 
 	def initialize(opts={})
 		opts.each_pair do |k, v|
@@ -95,7 +95,7 @@ class FormData
 
 	def to_trip
 		arrival_datetime = Time.parse("#{@date} #{@time} +0530")
-		Trip.new(name, email, airport, arrival_datetime, flight_no, time_tolerance.to_i, km_tolerance.to_i, address, BigDecimal.new(lat), BigDecimal.new(long), phone)
+		Trip.new(name, email, airport, arrival_datetime, time_tolerance.to_i, km_tolerance.to_i, address, BigDecimal.new(lat), BigDecimal.new(long), phone)
 	end
 end
 

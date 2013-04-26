@@ -4,7 +4,6 @@ create table trip (
   email varchar not null,
   airport varchar not null,
   arrival_datetime timestamp without time zone not null,
-  flight_no varchar not null,
   time_tolerance integer not null,
   km_tolerance integer not null,
   address varchar not null,

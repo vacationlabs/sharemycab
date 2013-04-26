@@ -259,11 +259,7 @@
 	</body>
 
 	<script type="text/javascript">
-		$(document).ready(function() {
-
-			// $("#save-button").click(function(){
-			// 	console.log($("#submit-form").serialize());
-			// });
+		$(document).ready(function() {			
 			$("#info-box").hide();
 			$("#error-box").hide();
 
@@ -320,7 +316,7 @@
 					url: "/places/"+$("#address").val()
 					}).success(function(data){
 						var availableAddress = [];
-						console.log(data.address_prediction);
+						
 						$.each(data["address_prediction"], function(index, value){							
 							availableAddress.push(value.address);
 							address_with_reference.push(value)
@@ -329,7 +325,7 @@
 					});
 				},
 				select: function(event,ui) {
-					console.log(ui.item);
+					
 					$.each(address_with_reference,function(i, v){
 				    if (ui.item.value == v.address){
 				      $('#reference_key').val(v["reference_key"]);

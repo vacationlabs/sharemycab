@@ -5,7 +5,6 @@
 
 <body>
 <form action="submit" method="POST" >
-<!-- :name,:email,:airport,:date_time,:flight_no,:time_tolerance,:km_tolerance,:address,:lat,:long,:phone,:status -->
 <% if not @form.errors_found.empty? %>
 	<h4>Errors Exist in the form: </h4>
 	<ul>
@@ -19,7 +18,6 @@ Airport: <input type="text" name="airport" value="<%= @form.airport %>" /><br />
 Email: <input type="email" name="email" value="<%= @form.email %>" /><br />
 Date: <input type="date" name="date" value="<%= @form.date %>"/><br />
 Time: <input type="time" name="time" value="<%= @form.time %>" /><br />
-Flight No: <input type="text" name="flight_no" value="<%= @form.flight_no %>" /><br />
 Time tolerence: <input type="text" name="time_tolerance"  value="<%= @form.time_tolerance %>" /><br />
 KM tolerence: <input type="text" name="km_tolerance"  value="<%= @form.km_tolerance %>" /><br />
 Address: <input type="text" name="address" value="<%= @form.address %>"  /><br />
