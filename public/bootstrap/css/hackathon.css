@@ -78,6 +78,7 @@ body .easy-way {
 body .easy-way .well {
 	color: #eb4c41;
 	margin-bottom: 0px;
+	min-height: 220px;
 }
 
 body .easy-way h2 {
