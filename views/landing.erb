@@ -21,7 +21,7 @@
 			</div>
 		</div -->
 		<div class="container">
-			<div class="alert alert-info">
+			<div class="alert top-alert">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
 				Find this interesting? Read more about how this app was made <a target="_blank" href="http://blog.vacationlabs.com/post/49256334221/48-hours-4-coder-1-awesome-web-app-the-ruby">here</a>
 			</div>
@@ -282,6 +282,8 @@
 		$(document).ready(function() {			
 			$("#info-box").hide();
 			$("#error-box").hide();
+			
+			$(".top-alert").delay(2000).show("blind", { direction: "vertical" }, 1000);
 
 			$("#save-button").click(function(){
 				$(this).attr('disabled', true);

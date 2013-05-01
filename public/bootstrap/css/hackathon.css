@@ -1,5 +1,6 @@
 body {
 	font-family: 'Open Sans', sans-serif;
+	background-color: #D1D1D1;
 }
 
 body h1, h2, h3, h4, h5, h6 {
@@ -110,8 +111,30 @@ body .other-way form input, body .other-way form select {
 	height: 30px;
 }
 
-.alert a {
-	color: #EB4C41;
+body .top-alert {
+	display: none;
+	margin: 0px;
+	border-radius: 0px !important;
+	border: 0px;
+	padding: 30px 30px;
+	font-size: 25px;
+	background-color: #316a88;
+	color: #f0f0f0;
+	text-shadow: none;
+}
+
+body .top-alert a{
+	color: #eb4c41;
+}
+
+body .top-alert button.close{
+	line-height: 30px;
+	font-size: 30px;
+	padding-right: 10px;
+}
+
+body .top-alert .close {
+	color: white;
 }
 
 #trip_date {
