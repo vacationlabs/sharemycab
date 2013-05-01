@@ -21,6 +21,10 @@
 			</div>
 		</div -->
 		<div class="container">
+			<div class="alert alert-info">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				Find this interesting? Read more about how this app was made <a target="_blank" href="http://blog.vacationlabs.com/post/49256334221/48-hours-4-coder-1-awesome-web-app-the-ruby">here</a>
+			</div>
 			<div class="header">
 				<img src="images/shareMyCab-logo.png" height="50" width="200" />
 			</div>
@@ -160,7 +164,7 @@
 							<div class="control-group">
 							 	<label class="control-label">I'm arriving at</label>
 								<div class="controls">
-									<input name="date" type="date" id="trip_date" value="<%= @form.date %>" placeholder="Arrival date"/>  on <input name="time" type="time" id="trip_time" value="<%= @form.time %>" placeholder="Arrival Time"/>
+									<input name="date" type="text" id="trip_date" value="<%= @form.date %>" placeholder="Arrival date"/>  on <input name="time" type="text" id="trip_time" value="<%= @form.time %>" placeholder="Arrival Time"/>
 								</div>
 							</div>
 							<!-- div class="control-group">
@@ -248,10 +252,26 @@
 						</div>					  
 					</div>
 					<div class="span7">
-						<h2> Meet The Team</h2>
-						<p>
-							This application was the result of a rigorous 48 hour <a target="_blank" href="http://www.vacationlabs.com/hackathon">hackathon</a> organized by <a target="_blank" href="http://www.vacationlabs.com">Vacationlabs</a> at Porvorim, Goa. Shanker, Rajdeep, Tanay and Ankit sacrificed a weekend in the name of technology and building something for the greater good of us humans ! :).
-						</p>
+
+						<div class="row-fluid">
+							<div class="span12">
+								<h2>Meet The Team</h2>
+								<p>
+									This application was the result of a rigorous 48 hour <a target="_blank" href="http://www.vacationlabs.com/hackathon">hackathon</a> organized by <a target="_blank" href="http://www.vacationlabs.com">Vacationlabs</a> at Porvorim, Goa. Shanker, Rajdeep, Tanay and Ankit sacrificed a weekend in the name of technology and building something for the greater good of us humans ! :).
+								</p>
+							</div>
+						</div>
+
+						<div class="row-fluid">
+							<div class="span12">
+								<h2>About Vacationlabs</h2>
+								<p>
+									<a target="_blank" href="http://www.vacationlabs.com">Vacationlabs</a> is a software startup operating out of their bungalow/office in Porvorim, Goa. We love to help travel businesses with their online marketing & distribution strategy. Linux, Ruby, Rails, HTML5, jQuery, Git, and Postgres are the tools of our trade. And yes, we love open source.
+								</p>
+								<p>If you are interested in joining the team, apply <a target="_blank"	href="http://www.vacationlabs.com/careers">here</a>.</p>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			</div>

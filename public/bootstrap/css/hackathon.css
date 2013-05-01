@@ -110,12 +110,16 @@ body .other-way form input, body .other-way form select {
 	height: 30px;
 }
 
+.alert a {
+	color: #EB4C41;
+}
+
 #trip_date {
 	width: 8em;
 }
 
 #trip_time {
-	width: 6em;
+	width: 8em;
 }
 
 #time_slider, #km_slider {
